@@ -4,7 +4,7 @@ import calculateWinner from "../utils/calculateWinner";
 import resetBoard from "../utils/resetBoard";
 import TableScore from "./TableScore";
 
-function Board() {
+function Board({scoreO, scoreX, setScoreO, setScoreX}) {
     // STATES
     // initialize array of state foreach square
     const startGamePositions = [];
@@ -13,8 +13,7 @@ function Board() {
     }
     const [squares, setSquares] = useState(startGamePositions);
     const [xIsNext, setXisNext] = useState(true);
-    const [scoreX, setScoreX] = useState(0);
-    const [scoreO, setScoreO] = useState(0);
+    
 
 
 
@@ -25,6 +24,8 @@ function Board() {
     let status;
     if(winner) {
         status = "Winner: " + winner;
+    } else if (!squares.includes(null)) {
+        status = "It's a Draw ! Try again";
     } else {
         status = "Next Player is : " + (xIsNext ? "X" : "O");
     }
@@ -47,9 +48,9 @@ function Board() {
         setSquares(squaresCopy);
         setXisNext(!xIsNext);
 
+        // 
         if(calculateWinner(squaresCopy)) {
-            (calculateWinner(squaresCopy) == "X" ? setScoreX(scoreX + 1) : setScoreO(scoreO + 1));
-            console.log("Dans le if du winner", calculateWinner(squaresCopy))
+            calculateWinner(squaresCopy) == "X" ? setScoreX(scoreX + 1) : setScoreO(scoreO + 1);
         }
     }
 
@@ -80,8 +81,7 @@ function Board() {
                 Relancer une partie
             </button>
 
-            <TableScore player="X" score={scoreX}/>
-            <TableScore player="O" score={scoreO}/>
+            
         </>
         )
 }

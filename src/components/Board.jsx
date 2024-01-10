@@ -2,7 +2,6 @@ import { useState } from "react";
 import Square from "./Square"
 import calculateWinner from "../utils/calculateWinner";
 import resetBoard from "../utils/resetBoard";
-import TableScore from "./TableScore";
 
 function Board({scoreO, scoreX, setScoreO, setScoreX}) {
     // STATES
@@ -11,15 +10,13 @@ function Board({scoreO, scoreX, setScoreO, setScoreX}) {
     for (let i = 0; i < 9; i++) {
         startGamePositions.push(null);
     }
+    // array who represent the state of each square of the board
     const [squares, setSquares] = useState(startGamePositions);
+
+    // state who handle the current player (if not X player turn then it's O player turn)
     const [xIsNext, setXisNext] = useState(true);
-    
-
-
-
 
     const winner = calculateWinner(squares);
-
 
     let status;
     if(winner) {
@@ -48,13 +45,13 @@ function Board({scoreO, scoreX, setScoreO, setScoreX}) {
         setSquares(squaresCopy);
         setXisNext(!xIsNext);
 
-        // 
-        if(calculateWinner(squaresCopy)) {
+        // update scores if winner
+        if(calculateWinner(squaresCopy)) { // return true if winner
             calculateWinner(squaresCopy) == "X" ? setScoreX(scoreX + 1) : setScoreO(scoreO + 1);
         }
     }
 
-
+    // AFFICHAGE
     return (
         <>
             <div className="status">{status}</div>
@@ -74,6 +71,8 @@ function Board({scoreO, scoreX, setScoreO, setScoreX}) {
                 <Square value = {squares[8]} onSquareClick={() => handleClick(8)} />
             </div>
             
+
+            {/* button to reset the board */}
             <button 
                 style={{marginTop : "20px", marginBottom: "20px"}} 
                 onClick={() => resetBoard(setSquares, setXisNext)}
